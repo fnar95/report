@@ -5,8 +5,12 @@ document.getElementById('strategyForm').addEventListener('submit', function(even
     const formData = new FormData(form);
     const reportOutput = document.getElementById('reportOutput');
 
-    // Clear previous report
+    // Clear previous report and buttons
     reportOutput.innerHTML = '';
+    const existingButton = document.getElementById('printButton');
+    if (existingButton) {
+        existingButton.remove();
+    }
 
     // Header
     const header = document.createElement('div');
@@ -24,7 +28,7 @@ document.getElementById('strategyForm').addEventListener('submit', function(even
     title.textContent = 'نموذج تنفيذ استراتيجية مختصرة';
     reportOutput.appendChild(title);
 
-    // Function to create a section with items and values
+    // Function to create a section
     function createSection(items) {
         const section = document.createElement('div');
         section.className = 'report-section';
@@ -88,12 +92,21 @@ document.getElementById('strategyForm').addEventListener('submit', function(even
     // Evidence Photos
     const evidence1 = formData.get('evidence1');
     const evidence2 = formData.get('evidence2');
-    if (evidence1.name || evidence2.name) {
+    if (evidence1.size > 0 || evidence2.size > 0) {
         const evidenceSection = document.createElement('div');
         evidenceSection.className = 'report-section';
-        let evidenceHTML = '<div class="report-item full-width"><strong>صور الشواهد</strong></div>';
-        if (evidence1.name) evidenceHTML += `<div class="report-value full-width">الشاهد الأول: ${evidence1.name}</div>`;
-        if (evidence2.name) evidenceHTML += `<div class="report-value full-width">الشاهد الثاني: ${evidence2.name}</div>`;
+        let evidenceHTML = '<div class="report-item full-width"><strong>صور الشواهد</strong></div><div class="report-value full-width report-images">';
+        
+        if (evidence1.size > 0) {
+            const imgUrl1 = URL.createObjectURL(evidence1);
+            evidenceHTML += `<div class="evidence-image-container"><p>الشاهد الأول</p><img src="${imgUrl1}" alt="الشاهد الأول"></div>`;
+        }
+        if (evidence2.size > 0) {
+            const imgUrl2 = URL.createObjectURL(evidence2);
+            evidenceHTML += `<div class="evidence-image-container"><p>الشاهد الثاني</p><img src="${imgUrl2}" alt="الشاهد الثاني"></div>`;
+        }
+
+        evidenceHTML += '</div>';
         evidenceSection.innerHTML = evidenceHTML;
         reportOutput.appendChild(evidenceSection);
     }

@@ -152,6 +152,24 @@ button:hover {
     margin-bottom: 40px;
 }
 
+.report-images {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding: 10px;
+}
+
+.evidence-image-container {
+    text-align: center;
+}
+
+.report-images img {
+    max-width: 200px;
+    max-height: 200px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
 @media print {
     body, .container {
         background: #fff;
