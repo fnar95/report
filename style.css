@@ -99,7 +99,7 @@ button { padding: 12px 25px; border: none; background: #0056b3; color: white; bo
     }
 
     /* Hide form, titles, and buttons */
-    #strategyForm, #printButton, h1, .container > h1, .container > form, .container > button, .page-footer {
+    #strategyForm, #printButton, h1, .container > h1, .container > form, .container > button, .page-footer, .form-header-logo {
         display: none;
     }
 
