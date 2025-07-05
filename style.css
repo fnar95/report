@@ -1,0 +1,244 @@
+body {
+    font-family: 'Tajawal', sans-serif;
+    background-color: #e9e9e9;
+    color: #333;
+    line-height: 1.6;
+    direction: rtl;
+}
+
+.container {
+    max-width: 850px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fdfdfd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #0056b3;
+    font-weight: 700;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.checkbox-group label {
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+button {
+    display: inline-block;
+    padding: 12px 25px;
+    border: none;
+    background: #0056b3;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background: #004494;
+}
+
+#printButton {
+    background: #28a745;
+}
+
+#printButton:hover {
+    background: #218838;
+}
+
+/* Report Styles */
+.report-output {
+    display: none; /* Hidden by default */
+    border: 1px solid #dee2e6;
+    padding: 30px;
+    margin-top: 20px;
+    background: #fff;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
+}
+
+.report-header {
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+
+.report-header img {
+    height: 60px;
+    margin-bottom: 10px;
+}
+
+.report-header h2 {
+    font-size: 16px;
+    margin: 0;
+    font-weight: 400;
+    color: #666;
+}
+
+.report-title {
+    background-color: #004a99;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+.report-section {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden; /* To keep border-radius */
+    margin-bottom: 15px;
+}
+
+.report-section > div {
+    display: flex;
+    border-bottom: 1px solid #e9ecef;
+}
+.report-section > div:last-child {
+    border-bottom: none;
+}
+
+.report-item, .report-value {
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.report-item {
+    background-color: #f8f9fa;
+    font-weight: 700;
+    flex-basis: 25%;
+    border-right: 1px solid #e9ecef;
+}
+
+.report-value {
+    flex-basis: 75%;
+}
+
+.full-width .report-item,
+.full-width .report-value {
+    flex-basis: 100%;
+    border-right: none;
+}
+
+.report-list ul {
+    list-style-type: none;
+    padding-right: 0;
+    margin: 0;
+}
+
+.report-list li {
+    padding: 6px 0;
+    border-bottom: 1px dashed #ddd;
+}
+.report-list li:last-child {
+    border-bottom: none;
+}
+
+.report-images {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding: 15px;
+    flex-wrap: wrap;
+}
+
+.evidence-image-container {
+    text-align: center;
+    font-weight: 700;
+    color: #555;
+}
+
+.evidence-image-container p {
+    margin-bottom: 8px;
+}
+
+.report-images img {
+    max-width: 220px;
+    max-height: 220px;
+    border: 3px solid #eee;
+    border-radius: 8px;
+    padding: 3px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.report-footer {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 2px solid #f0f0f0;
+}
+
+.signature p:first-child {
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+@media print {
+    body, .container {
+        background: #fff;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+    }
+    #strategyForm, #printButton, h1, .container > button {
+        display: none;
+    }
+    .report-output {
+        display: block !important;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+}
