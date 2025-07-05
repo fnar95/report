@@ -8,130 +8,108 @@ document.getElementById('strategyForm').addEventListener('submit', function(even
     // Clear previous report and buttons
     reportOutput.innerHTML = '';
     const existingButton = document.getElementById('printButton');
-    if (existingButton) {
-        existingButton.remove();
-    }
+    if (existingButton) existingButton.remove();
 
-    // Header
+    // --- REPORT HEADER ---
     const header = document.createElement('div');
     header.className = 'report-header';
     header.innerHTML = `
-        <img src="https://edu-forms.com/img/logo.png" alt="Logo" style="height: 50px;">
+        <img src="https://edu-forms.com/img/logo.png" alt="Logo">
         <h2>المملكة العربية السعودية</h2>
         <h2>وزارة التعليم</h2>
     `;
     reportOutput.appendChild(header);
 
-    // Title
+    // --- REPORT TITLE ---
     const title = document.createElement('div');
     title.className = 'report-title';
     title.textContent = 'نموذج تنفيذ استراتيجية مختصرة';
     reportOutput.appendChild(title);
 
-    // Function to create a section
-    function createSection(items) {
-        const section = document.createElement('div');
-        section.className = 'report-section';
-        items.forEach(item => {
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'report-item';
-            itemDiv.textContent = item.label;
+    // --- REPORT BODY ---
+    const reportBody = document.createElement('div');
+    reportBody.className = 'report-body';
 
-            const valueDiv = document.createElement('div');
-            valueDiv.className = 'report-value';
-            valueDiv.textContent = item.value;
-            
-            section.appendChild(itemDiv);
-            section.appendChild(valueDiv);
-        });
-        reportOutput.appendChild(section);
+    // Function to create a row in the report table
+    function createRow(label, value) {
+        const row = document.createElement('div');
+        row.className = 'report-row';
+        row.innerHTML = `
+            <div class="report-item">${label}</div>
+            <div class="report-value">${value || '-'}</div>
+        `;
+        return row;
     }
-    
-    // Basic Info
-    createSection([
-        { label: 'إدارة التعليم', value: formData.get('educationDepartment') },
-        { label: 'اسم المدرسة', value: formData.get('schoolName') },
-        { label: 'تاريخ التنفيذ', value: formData.get('implementationDate') },
-        { label: 'المادة', value: formData.get('subject') },
-        { label: 'استراتيجية التعلم', value: formData.get('learningStrategy') },
-        { label: 'عدد المستفيدين', value: formData.get('beneficiaries') },
-        { label: 'المرحلة الدراسية', value: formData.get('educationalStage') },
-        { label: 'الفصل', value: formData.get('class') },
-        { label: 'اسم الدرس', value: formData.get('lessonName') },
-    ]);
 
-    // Objectives
+    // --- BASIC INFO SECTION ---
+    const infoSection = document.createElement('div');
+    infoSection.className = 'report-section';
+    infoSection.appendChild(createRow('إدارة التعليم', formData.get('educationDepartment')));
+    infoSection.appendChild(createRow('اسم المدرسة', formData.get('schoolName')));
+    infoSection.appendChild(createRow('تاريخ التنفيذ', formData.get('implementationDate')));
+    infoSection.appendChild(createRow('المادة', formData.get('subject')));
+    infoSection.appendChild(createRow('استراتيجية التعلم', formData.get('learningStrategy')));
+    infoSection.appendChild(createRow('عدد المستفيدين', formData.get('beneficiaries')));
+    infoSection.appendChild(createRow('المرحلة الدراسية', formData.get('educationalStage')));
+    infoSection.appendChild(createRow('الفصل', formData.get('class')));
+    infoSection.appendChild(createRow('اسم الدرس', formData.get('lessonName')));
+    reportBody.appendChild(infoSection);
+
+    // --- OBJECTIVES SECTION ---
     const objectives = formData.getAll('objectives[]').filter(o => o.trim() !== '');
     if (objectives.length > 0) {
         const objectivesSection = document.createElement('div');
         objectivesSection.className = 'report-section';
-        objectivesSection.innerHTML = `
-            <div class="report-item full-width"><strong>الأهداف</strong></div>
-            <div class="report-value full-width report-list">
-                <ul>${objectives.map(o => `<li>${o}</li>`).join('')}</ul>
-            </div>
-        `;
-        reportOutput.appendChild(objectivesSection);
+        const list = `<ul>${objectives.map(o => `<li>${o}</li>`).join('')}</ul>`;
+        objectivesSection.appendChild(createRow('الأهداف', list));
+        reportBody.appendChild(objectivesSection);
     }
 
-    // Aids
+    // --- AIDS SECTION ---
     const aids = formData.getAll('aids');
     if (aids.length > 0) {
         const aidsSection = document.createElement('div');
         aidsSection.className = 'report-section';
-        const aidLabels = aids.map(aid => form.querySelector(`input[value="${aid}"]`).parentElement.innerText);
-        aidsSection.innerHTML = `
-            <div class="report-item full-width"><strong>الوسائل التعليمية المستخدمة</strong></div>
-            <div class="report-value full-width report-list">
-                <ul>${aidLabels.map(a => `<li>${a}</li>`).join('')}</ul>
-            </div>
-        `;
-        reportOutput.appendChild(aidsSection);
+        const aidLabels = aids.map(aid => form.querySelector(`input[value="${aid}"]`).parentElement.innerText.trim());
+        const list = `<ul>${aidLabels.map(a => `<li>${a}</li>`).join('')}</ul>`;
+        aidsSection.appendChild(createRow('الوسائل التعليمية المستخدمة', list));
+        reportBody.appendChild(aidsSection);
     }
-    
-    // Evidence Photos
+
+    // --- EVIDENCE SECTION ---
     const evidence1 = formData.get('evidence1');
     const evidence2 = formData.get('evidence2');
     if (evidence1.size > 0 || evidence2.size > 0) {
         const evidenceSection = document.createElement('div');
         evidenceSection.className = 'report-section';
-        let evidenceHTML = '<div class="report-item full-width"><strong>صور الشواهد</strong></div><div class="report-value full-width report-images">';
-        
+        let imagesHTML = '<div class="report-images">';
         if (evidence1.size > 0) {
-            const imgUrl1 = URL.createObjectURL(evidence1);
-            evidenceHTML += `<div class="evidence-image-container"><p>الشاهد الأول</p><img src="${imgUrl1}" alt="الشاهد الأول"></div>`;
+            imagesHTML += `<div class="evidence-image-container"><p>الشاهد الأول</p><img src="${URL.createObjectURL(evidence1)}"></div>`;
         }
         if (evidence2.size > 0) {
-            const imgUrl2 = URL.createObjectURL(evidence2);
-            evidenceHTML += `<div class="evidence-image-container"><p>الشاهد الثاني</p><img src="${imgUrl2}" alt="الشاهد الثاني"></div>`;
+            imagesHTML += `<div class="evidence-image-container"><p>الشاهد الثاني</p><img src="${URL.createObjectURL(evidence2)}"></div>`;
         }
-
-        evidenceHTML += '</div>';
-        evidenceSection.innerHTML = evidenceHTML;
-        reportOutput.appendChild(evidenceSection);
+        imagesHTML += '</div>';
+        evidenceSection.appendChild(createRow('صور الشواهد', imagesHTML));
+        reportBody.appendChild(evidenceSection);
     }
 
-    // Footer (Signatures)
+    reportOutput.appendChild(reportBody);
+
+    // --- FOOTER SECTION ---
     const footer = document.createElement('div');
     footer.className = 'report-footer';
     footer.innerHTML = `
-        <div class="signature">
-            <p>اسم المعلم</p>
-            <p>${formData.get('teacherName')}</p>
-        </div>
-        <div class="signature">
-            <p>اسم آخر مدير المدرسة</p>
-            <p>${formData.get('principalName')}</p>
-        </div>
+        <div class="signature"><strong>اسم المعلم</strong><p>${formData.get('teacherName')}</p></div>
+        <div class="signature"><strong>اسم آخر مدير المدرسة</strong><p>${formData.get('principalName')}</p></div>
     `;
     reportOutput.appendChild(footer);
 
-    // Hide form and show report
+    // --- ACTIONS ---
     form.style.display = 'none';
     document.querySelector('h1').style.display = 'none';
     reportOutput.style.display = 'block';
 
-    // Add print button
     const printButton = document.createElement('button');
     printButton.textContent = 'طباعة التقرير';
     printButton.id = 'printButton';
